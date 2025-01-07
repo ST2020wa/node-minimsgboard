@@ -3,13 +3,16 @@
   <h2>Let's chat!</h2>
   <div style="display: flex; gap:12px;">
     <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName"></app-input>
-    <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg"></app-input>
+    <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmit()"></app-input>
     <button (click)="onSubmit()" style="width: fit-content">Send</button>
   </div>
 </div>
 
 <ul>
-  <div *ngFor="let msg of messages">
-    {{msg.content}}
+  <div *ngFor="let msg of messages" style="display: flex; gap:12px;">
+    <div>{{msg.msg}}</div>
+    <div>from</div>
+    <div>{{msg.name}}</div>
+    <div>{{msg.created_at | date:'short'}}</div>
   </div>
 </ul>

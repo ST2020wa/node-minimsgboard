@@ -2,19 +2,20 @@ import { RouterOutlet } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.service';
 import { response } from 'express';
-import { NgFor } from '@angular/common';
+import { DatePipe, NgFor } from '@angular/common';
 import { InputComponent } from './input/input.component';
 
 interface msgType {
   id: number;
-  content: string;
+  msg: string;
+  name: string;
   created_at: string;
 } 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [InputComponent,NgFor],
+  imports: [InputComponent,NgFor,DatePipe],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -45,12 +46,11 @@ export class AppComponent {
     // Method to handle form submission
     public onSubmit() {
       if (this.newMsg.trim() && this.newName.trim()) {
-        this.apiService.sendMessage(this.newMsg).subscribe(
+        this.apiService.sendMessage(this.newName, this.newMsg).subscribe(
           (response) => {
             this.messages.push(response);  // Add the new message to the list
             this.newName='';
             this.newMsg='';
-            console.log(this.messages);
           },
           (error) => {
             console.error('Error sending message:', error);

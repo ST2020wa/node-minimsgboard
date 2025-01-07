@@ -16,10 +16,10 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/data`);
   }
 
-    // Method to send a new message to the backend
-    sendMessage(content: string): Observable<any> {
-      // ATTENTION: the data prepared for backend should be an object
-      const message = { content };  // Prepare the message object
-      return this.http.post(`${this.apiUrl}/messages`, message);  // Send POST request to backend
-    }
+  // Method to send a new message to the backend
+  sendMessage( name:string, msg:string): Observable<any> {
+    // ATTENTION: the data prepared for backend should be an object
+    const message = {  name:name,msg:msg };  // Prepare the message object
+    return this.http.post(`${this.apiUrl}/messages`, message);  // Send POST request to backend
+  }
 }
