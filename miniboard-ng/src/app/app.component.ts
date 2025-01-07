@@ -26,6 +26,7 @@ export class AppComponent {
   newName='';
   newMsg='';
   Msgs:string[]=[];
+  trimFlag=false;
   
   constructor(private apiService: ApiService){}
 
@@ -54,6 +55,7 @@ export class AppComponent {
           },
           (error) => {
             console.error('Error sending message:', error);
+            alert("Oops, something went wrong. Failed to send the message.")
           }
         );
       }else{

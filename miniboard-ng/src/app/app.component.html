@@ -1,18 +1,20 @@
-<div>
-  <h1>Message board</h1>
-  <h2>Let's chat!</h2>
-  <div style="display: flex; gap:12px;">
-    <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName"></app-input>
-    <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmit()"></app-input>
-    <button (click)="onSubmit()" style="width: fit-content">Send</button>
+<div class="body">
+  <div>
+    <h1>Message board</h1>
+    <h2>Let's chat!</h2>
+    <div class="input-field">
+      <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName" [maxLength]="30"></app-input>
+      <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmit()"></app-input>
+      <button (click)="onSubmit()" style="width: fit-content">Send</button>
+    </div>
   </div>
+  
+  <ul>
+    <div class="message-box" *ngFor="let msg of messages" style="display: flex; gap:12px;">
+      <div class="msg">{{msg.msg}}</div>
+      <div>from</div>
+      <div>{{msg.name}}</div>
+      <div>{{msg.created_at | date:'short'}}</div>
+    </div>
+  </ul>
 </div>
-
-<ul>
-  <div *ngFor="let msg of messages" style="display: flex; gap:12px;">
-    <div>{{msg.msg}}</div>
-    <div>from</div>
-    <div>{{msg.name}}</div>
-    <div>{{msg.created_at | date:'short'}}</div>
-  </div>
-</ul>

@@ -1,0 +1,72 @@
+.body {
+    height:100vh;
+    padding: 6px 12px;
+    font-family: 'VT323', monospace;
+    background-color: #000;
+    color: #00FF00;
+    text-shadow: 0px 0px 10px #00FF00, 0px 0px 20px #00FF00;
+
+    h1 {
+        font-family: 'Courier New', monospace; /* Match overall retro vibe */
+        font-size: 36px; /* Large size for prominence */
+        color: #00FF00; /* Bright green */
+        text-align: center; /* Center the title */
+        text-shadow: 0px 0px 5px #00FF00, 0px 0px 15px #00FF00; /* Glowing effect */
+        margin-bottom: 20px;
+        cursor: default;
+      }
+      h2 {
+        cursor: default;
+      }
+      
+      h1::after {
+        content: "_"; /* Add a blinking underscore */
+        animation: blink 1s steps(2, start) infinite;
+      }
+      
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    .input-field {
+        display: flex;
+        gap:48px;
+        align-items: center;
+    }
+    .message-box {
+        border: 1px solid #00FF00;
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #001100; /* A subtle green tint */
+        font-style: italic;
+        .msg {
+            font-style: normal;
+            margin-right: 20px;
+        }
+      }
+  
+      button {
+        font-family: 'Courier New', monospace;
+        color: #00FF00;
+        background-color: #000;
+        border: 1px solid #00FF00;
+        padding: 5px 15px;
+        cursor: pointer;
+        text-transform: uppercase;
+        height:3em;
+      }
+  
+      button:hover {
+        background-color: #001100;
+      }
+  
+      .form-container {
+        width: 400px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      ul {
+        padding: 0;
+      }
+  }
