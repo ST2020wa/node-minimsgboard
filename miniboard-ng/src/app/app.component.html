@@ -1,14 +1,9 @@
 <div>
-  <h1>Data from Node.js Backend:</h1>
-  <pre>{{ data | json }}</pre>
-</div>
-
-<div>
   <h1>Message board</h1>
   <h2>Let's chat!</h2>
   <div style="display: flex; gap:12px;">
-    <app-input [title]="'Name'" (newValue)="nameInputHandler($event)"></app-input>
-    <app-input [title]="'Message'" (newValue)="msgInputHandler($event)"></app-input>
+    <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName"></app-input>
+    <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg"></app-input>
     <button (click)="onSubmit()" style="width: fit-content">Send</button>
   </div>
 </div>

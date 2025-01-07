@@ -2,8 +2,7 @@ import { RouterOutlet } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from './api.service';
 import { response } from 'express';
-import { JsonPipe, NgFor } from '@angular/common';
-import { log } from 'console';
+import { NgFor } from '@angular/common';
 import { InputComponent } from './input/input.component';
 
 interface msgType {
@@ -15,7 +14,7 @@ interface msgType {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,JsonPipe,InputComponent,NgFor],
+  imports: [InputComponent,NgFor],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
