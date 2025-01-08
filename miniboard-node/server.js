@@ -10,6 +10,10 @@ app.use(cors());
 
 // Middleware to parse JSON bodies in POST requests
 app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.send('Welcome to my Node.js API service!');
+});
   
   // Get all messages
 app.get('/messages', (req, res) => {
