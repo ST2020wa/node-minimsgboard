@@ -31,9 +31,6 @@ export class AppComponent {
   constructor(private apiService: ApiService){}
 
   ngOnInit():void{
-    this.apiService.getData().subscribe(response => {
-      this.data = response;
-    })
   }
 
   public nameInputHandler(e){
