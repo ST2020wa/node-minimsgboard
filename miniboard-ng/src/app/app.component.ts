@@ -25,14 +25,14 @@ export class AppComponent {
   messages:msgType[]=[];
   newName='';
   newMsg='';
-  Msgs:string[]=[];
   trimFlag=false;
+  savedMsg:msgType[]=[];
   
   constructor(private apiService: ApiService){}
 
   ngOnInit():void{
-    this.apiService.getData().subscribe(response => {
-      this.data = response;
+    this.apiService.getSavedData().subscribe(response => {
+      this.messages = response;
     })
   }
 

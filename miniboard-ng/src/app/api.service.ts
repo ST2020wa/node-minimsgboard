@@ -16,6 +16,10 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/data`);
   }
 
+  getSavedData(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/messages`);
+  }
+
   // Method to send a new message to the backend
   sendMessage( name:string, msg:string): Observable<any> {
     // ATTENTION: the data prepared for backend should be an object
