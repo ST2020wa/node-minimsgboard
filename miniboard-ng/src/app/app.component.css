@@ -34,6 +34,13 @@
         gap:48px;
         align-items: center;
     }
+    .login {
+      cursor: default;
+        .underline {
+          text-decoration: underline;
+          cursor: pointer;
+        }
+    }
     .message-box {
         border: 1px solid #00FF00;
         padding: 10px;

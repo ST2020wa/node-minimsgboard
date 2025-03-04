@@ -1,9 +1,10 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from './api.service';
 import { response } from 'express';
-import { DatePipe, NgFor } from '@angular/common';
+import { CommonModule, DatePipe, NgFor } from '@angular/common';
 import { InputComponent } from './input/input.component';
+import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 
 interface msgType {
   id: number;
@@ -15,18 +16,19 @@ interface msgType {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [InputComponent,NgFor,DatePipe],
+  imports: [InputComponent,NgFor,DatePipe,CommonModule,LoginDialogComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'miniboard-ng';
-  data: any;
-  messages:msgType[]=[];
-  newName='';
-  newMsg='';
-  trimFlag=false;
-  savedMsg:msgType[]=[];
+  @ViewChild(LoginDialogComponent) loginDialog!: LoginDialogComponent;
+  public title = 'miniboard-ng';
+  public messages:msgType[]=[];
+  public newName='';
+  public newMsg='';
+  public trimFlag=false;
+  public savedMsg:msgType[]=[];
+  public username = 'guest'
   
   constructor(private apiService: ApiService){}
 
@@ -61,5 +63,9 @@ export class AppComponent {
       }else{
         alert("Both name and message fields are required.");
       }
+    }
+
+    public openLoginDialog(): void {
+      this.loginDialog.openDialog();
     }
   }

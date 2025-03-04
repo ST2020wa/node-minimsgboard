@@ -1,0 +1,13 @@
+<dialog #loginDialog>
+    <h2>Log in</h2>
+    <form>
+      <label for="username">Username:</label>
+      <input id="username" [(ngModel)]="username" name="username" required>
+  
+      <label for="password">Password:</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required>
+  
+      <button type="button" (click)="closeDialog()">Cancel</button>
+      <button type="submit" (click)="onSubmit()">Log in</button>
+    </form>
+  </dialog>
