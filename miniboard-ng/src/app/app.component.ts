@@ -5,6 +5,7 @@ import { response } from 'express';
 import { CommonModule, DatePipe, NgFor } from '@angular/common';
 import { InputComponent } from './input/input.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
+import { FormsModule } from '@angular/forms';
 
 interface msgType {
   id: number;
@@ -16,7 +17,7 @@ interface msgType {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [InputComponent,NgFor,DatePipe,CommonModule,LoginDialogComponent],
+  imports: [InputComponent,NgFor,DatePipe,CommonModule,LoginDialogComponent,FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -35,7 +36,8 @@ export class AppComponent {
   ngOnInit():void{
     this.apiService.getSavedData().subscribe(response => {
       this.messages = response;
-    })
+    });
+    this.apiService.checkAuth().subscribe();
   }
 
   public nameInputHandler(e){
@@ -47,7 +49,7 @@ export class AppComponent {
   }
 
     // Method to handle form submission
-    public onSubmit() {
+    public onSubmitMsg() {
       if (this.newMsg.trim() && this.newName.trim()) {
         this.apiService.sendMessage(this.newName, this.newMsg).subscribe(
           (response) => {
@@ -68,4 +70,13 @@ export class AppComponent {
     public openLoginDialog(): void {
       this.loginDialog.openDialog();
     }
+
+    public isLoggedIn(): boolean {
+      return localStorage.getItem("username") !== null;
+    }
+    
+    public getLoggedInUser(): string | null {
+      return localStorage.getItem("username");
+    }
+    
   }

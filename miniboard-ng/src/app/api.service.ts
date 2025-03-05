@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { log } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,38 @@ export class ApiService {
 
   // Method to send a new message to the backend
   sendMessage( name:string, msg:string): Observable<any> {
-    // ATTENTION: the data prepared for backend should be an object
-    const message = {  name:name,msg:msg };  // Prepare the message object
-    return this.http.post(`${this.apiUrl}/messages`, message);  // Send POST request to backend
+    const message = {  name:name,msg:msg };
+    return this.http.post(`${this.apiUrl}/messages`, message); 
+  }
+
+  onLogIn(username: string, pwd: string){
+    const userInfo = {username: username, pwd: pwd};
+    return this.http.post(`${this.apiUrl}/log-in`, userInfo);  
+  }
+
+  onLogin(username: string, password: string){
+    const userInfo = {username: username, password: password}
+    return this.http.post<{ username: string; message: string }>(`http://localhost:3000/log-in`, userInfo).pipe(
+      tap((response)=>{
+        console.log("log in successful: ", response);
+        localStorage.setItem("username", response.username);
+      }),
+      catchError((error) => {
+        console.error('log in error:', error);
+        return throwError(() => new Error('log in error'));
+      })
+    );  
+  }
+
+  checkAuth() {
+    return this.http.get<{ username: string }>("http://localhost:3000/current-user").pipe(
+      tap((response) => {
+        localStorage.setItem("username", response.username);
+      }),
+      catchError(() => {
+        localStorage.removeItem("username");
+        return of(null);
+      })
+    );
   }
 }

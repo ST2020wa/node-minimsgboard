@@ -2,12 +2,13 @@
   <div>
     <h1>Message board</h1>
     <h2>Let's chat!</h2>
-    <div class="input-field" *ngIf="username!=='guest'">
+    <p *ngIf="isLoggedIn()">Welcome, {{ getLoggedInUser() }}!</p>
+    <div class="input-field" *ngIf="getLoggedInUser()">
       <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName" [maxLength]="30"></app-input>
-      <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmit()"></app-input>
-      <button (click)="onSubmit()" style="width: fit-content">Send</button>
+      <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmitMsg()"></app-input>
+      <button (click)="onSubmitMsg()" style="width: fit-content">Send</button>
     </div>
-    <div class="login" *ngIf="username === 'guest'"><span class="underline" (click)="openLoginDialog()">Log in</span> to send your first message. </div>
+    <div class="login" *ngIf="!getLoggedInUser()"><span class="underline" (click)="openLoginDialog()">Log in</span> to send your first message. </div>
     <app-login-dialog></app-login-dialog>
   </div>
   

@@ -1,18 +1,40 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, ViewChild, ElementRef, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { log } from 'console';
+import { ApiService } from '../api.service';
+
+export type user = {
+  id?: number,
+  username: string,
+  password: string,
+  fist_name?: string,
+  last_name?: string,
+  member_status?: string
+}
 
 @Component({
   selector: 'app-login-dialog',
   templateUrl: './login-dialog.component.html',
-  styleUrls: ['./login-dialog.component.css']
+  styleUrls: ['./login-dialog.component.css'],
+  imports: [FormsModule,CommonModule]
 })
 export class LoginDialogComponent {
   @ViewChild('loginDialog') loginDialog!: ElementRef<HTMLDialogElement>;
-  username: string = '';
-  password: string = '';
+  @Output() public userInfo:user;
+  public username = '';
+  public password = '';
+  public invitecode = '';
+  public showLogIn = true;
+  public showSignUp = false;
+
+  constructor(private apiService: ApiService){}
+
+  ngOnDestory(){
+    //
+  }
 
   openDialog(): void {
-    console.log('hi')
     this.loginDialog.nativeElement.showModal();
   }
 
@@ -20,9 +42,33 @@ export class LoginDialogComponent {
     this.loginDialog.nativeElement.close();
   }
 
-  onSubmit(): void {
+  toggleToSignUp(){
+    this.showLogIn = false;
+    this.showSignUp = true;
+    this.username='';
+    this.password='';
+  }
+
+  onLogIn(): void {
     console.log('Username:', this.username);
     console.log('Password:', this.password);
-    this.closeDialog();
+    this.apiService.onLogin(this.username, this.password).subscribe(
+      (response) => {
+        console.log('Login successful:', response);
+        // Handle successful login (e.g., update UI, redirect, etc.)
+        this.closeDialog();
+      },
+      (error) => {
+        console.error('Login failed:', error);
+        alert('Login failed. Please check your credentials.');
+      }
+    );
   }
+
+  onSignup(){
+    // TODO: check invitation code
+    console.log('invite code:', this.invitecode);
+    console.log('Username:', this.username);
+    console.log('Password:', this.password);
+    }
 }

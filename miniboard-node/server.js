@@ -7,12 +7,18 @@ const app = express();
 const port = 3000;
 const messages = [];
 
+const path = require("node:path");
+const session = require("express-session");
+const passport = require("passport");
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcryptjs')
+
 // Set up PostgreSQL client
 const pool = new Pool({
-  user: 'postgres', // replace with your PostgreSQL username
+  user: 'postgres',
   host: 'localhost',
-  database: 'miniboard', // your database name
-  password: 'postgres', // replace with your PostgreSQL password
+  database: 'miniboard',
+  password: 'postgres',
   port: 5432,
 });
 
@@ -23,8 +29,17 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Hello this is server.js!' });
+app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(passport.session());
+app.use(express.urlencoded({ extended: false }));
+
+app.get("/", (req, res) => {
+  res.render("index", { user: req.user });
+});
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
 });
 
 // Example route to provide a service
@@ -32,9 +47,7 @@ app.get('/api/data', (req, res) => {
   res.json({ message: 'Hello from ST! Welcome to my first FULL-STACK project!' });
 });
   
-  // Get all messages
-  // app.get('/messages', (req, res) => {
-  //   res.json(messages);
+
 app.get('/api/messages', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM messages ORDER BY created_at DESC');
@@ -45,7 +58,6 @@ app.get('/api/messages', async (req, res) => {
   }
 });
 
-// Post a new message (this is where the data will be received)
 app.post('/api/messages', async (req, res) => {
   const { name, msg } = req.body;
 
@@ -62,6 +74,100 @@ app.post('/api/messages', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
+  }
+});
+
+app.post("/sign-up", async (req, res, next) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
+      req.body.username,
+      hashedPassword
+    ]);
+    res.redirect("/");
+  } catch(err) {
+    return next(err);
+  }
+});
+
+app.post("/log-in", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).json({ message: "Server error" });
+    }
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Login failed" });
+      }
+      console.log("Logged in as:", user.username);
+      return res.json({ username: user.username, message: "Login successful" });
+    });
+  })(req, res, next);
+});
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const { rows } = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+      const user = rows[0];
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        // passwords do not match!
+        return done(null, false, { message: "Incorrect password" })
+      }
+      return done(null, user);
+    } catch(err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
+    const user = rows[0];
+
+    done(null, user);
+  } catch(err) {
+    done(err);
+  }
+});
+
+app.get("/log-out", (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+});
+
+app.use(session({
+  secret: "your_secret_key",
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}))
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// to check if a user is still logged in
+app.get("/current-user", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ username: req.user.username });
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
   }
 });
 
