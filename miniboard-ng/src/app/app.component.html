@@ -2,21 +2,20 @@
   <div>
     <h1>Message board</h1>
     <h2>Let's chat!</h2>
-    <p *ngIf="isLoggedIn()">Welcome, {{ getLoggedInUser() }}!</p>
-    <div class="input-field" *ngIf="getLoggedInUser()">
-      <app-input [title]="'Name'" (newValue)="nameInputHandler($event)" [inputValue]="newName" [maxLength]="30"></app-input>
-      <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmitMsg()"></app-input>
-      <button (click)="onSubmitMsg()" style="width: fit-content">Send</button>
+    <div class="input-field" *ngIf="username || null">
+      <p>Welcome {{username}}</p>
+      <app-input [title]="'Message'" (newValue)="msgInputHandler($event)" [inputValue]="newMsg" (hitEnter)="onSubmitMessage()"></app-input>
+      <button (click)="onSubmitMessage()" style="width: fit-content">Send</button>
     </div>
-    <div class="login" *ngIf="!getLoggedInUser()"><span class="underline" (click)="openLoginDialog()">Log in</span> to send your first message. </div>
+    <div class="login" *ngIf="!username"><span class="underline" (click)="openLoginDialog()">Log in</span> to send your first message. </div>
     <app-login-dialog></app-login-dialog>
   </div>
   
   <ul>
     <div class="message-box" *ngFor="let msg of messages" style="display: flex; gap:12px;">
-      <div class="msg">{{msg.msg}}</div>
+      <div class="msg">{{msg.content}}</div>
       <div>from</div>
-      <div>{{msg.name}}</div>
+      <div *ngIf="username.length">{{msg.user_id}}</div>
       <div>{{msg.created_at | date:'short'}}</div>
     </div>
   </ul>

@@ -9,6 +9,7 @@ import { log } from 'console';
 export class ApiService {
   
   private apiUrl = 'http://localhost:3000/api'; // URL to Node.js backend
+  private dbApiUrl = 'http://localhost:3000'
 
   constructor(private http: HttpClient) {}
 
@@ -18,13 +19,18 @@ export class ApiService {
   }
 
   getSavedData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/messages`);
+    return this.http.get(`${this.dbApiUrl}/messages`);
   }
 
   // Method to send a new message to the backend
   sendMessage( name:string, msg:string): Observable<any> {
     const message = {  name:name,msg:msg };
     return this.http.post(`${this.apiUrl}/messages`, message); 
+  }
+
+  submitMessage(username: string, msg: string): Observable<any>{
+    const message = {username: username, msg: msg}
+    return this.http.post(`${this.dbApiUrl}/submit-msg`, message); 
   }
 
   onLogIn(username: string, pwd: string){
@@ -34,7 +40,7 @@ export class ApiService {
 
   onLogin(username: string, password: string){
     const userInfo = {username: username, password: password}
-    return this.http.post<{ username: string; message: string }>(`http://localhost:3000/log-in`, userInfo).pipe(
+    return this.http.post<{ username: string; message: string }>(`${this.dbApiUrl}/log-in`, userInfo).pipe(
       tap((response)=>{
         console.log("log in successful: ", response);
         localStorage.setItem("username", response.username);

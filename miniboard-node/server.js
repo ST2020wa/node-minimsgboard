@@ -42,6 +42,15 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/messages', async (req, res)=>{
+  try{
+    const result = await pool.query('SELECT * FROM msg ORDER BY created_at DESC');
+    res.json(result.rows);
+}catch(err){
+  console.error(err);
+  res.status(500).send('Server error');}
+})
+
 // Example route to provide a service
 app.get('/api/data', (req, res) => {
   res.json({ message: 'Hello from ST! Welcome to my first FULL-STACK project!' });
@@ -170,6 +179,14 @@ app.get("/current-user", (req, res) => {
     res.status(401).json({ message: "Not authenticated" });
   }
 });
+
+app.post("/submit-msg", async (req, res, next)=>{
+  try {
+    await pool.query("INSERT INTO msg (user_id, content) VALUES ($1, $2)",[req.body.username, req.body.msg]);
+  }catch(err){
+    return next(err);
+  }
+})
 
   // Start the server
   app.listen(port, () => {

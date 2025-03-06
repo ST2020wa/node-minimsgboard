@@ -9,9 +9,10 @@ import { FormsModule } from '@angular/forms';
 
 interface msgType {
   id: number;
-  msg: string;
-  name: string;
+  content: string;
+  user_id: string;
   created_at: string;
+  title?: string;
 } 
 
 @Component({
@@ -29,15 +30,23 @@ export class AppComponent {
   public newMsg='';
   public trimFlag=false;
   public savedMsg:msgType[]=[];
-  public username = 'guest'
-  
-  constructor(private apiService: ApiService){}
+  public username: string;
+  constructor(private apiService: ApiService) {}
 
   ngOnInit():void{
     this.apiService.getSavedData().subscribe(response => {
       this.messages = response;
     });
     this.apiService.checkAuth().subscribe();
+  }
+
+  ngAfterViewInit(){
+    this.getLoggedInUser();
+  }
+
+  // TODO: check if reload is the only way to do so
+  public refreshPage(): void {
+    window.location.reload();
   }
 
   public nameInputHandler(e){
@@ -67,6 +76,24 @@ export class AppComponent {
       }
     }
 
+    public onSubmitMessage(){
+      if (this.newMsg.trim()) {
+        this.apiService.submitMessage(this.username, this.newMsg).subscribe(
+          (response) => {
+            this.messages.push(response);  // Add the new message to the list
+            this.newName='';
+            this.newMsg='';
+          },
+          (error) => {
+            console.error('Error sending message:', error);
+            alert("Oops, something went wrong. Failed to send the message.")
+          }
+        );
+      }else{
+        alert("Message field is required.");
+      }
+    }
+
     public openLoginDialog(): void {
       this.loginDialog.openDialog();
     }
@@ -74,9 +101,11 @@ export class AppComponent {
     public isLoggedIn(): boolean {
       return localStorage.getItem("username") !== null;
     }
-    
-    public getLoggedInUser(): string | null {
-      return localStorage.getItem("username");
+    public getLoggedInUser(){
+      this.username = localStorage.getItem("username") || '';
+      if(this.username.length){
+        localStorage.setItem('username', this.username);
+      }
     }
     
   }
