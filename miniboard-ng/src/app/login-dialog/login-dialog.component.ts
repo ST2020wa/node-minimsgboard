@@ -22,9 +22,10 @@ export type user = {
 export class LoginDialogComponent {
   @ViewChild('loginDialog') loginDialog!: ElementRef<HTMLDialogElement>;
   @Output() public userInfo:user;
+  @Input() public invitationCode: string;
   public username = '';
   public password = '';
-  public invitecode = '';
+  public invitationCodeUI = '';
   public showLogIn = true;
   public showSignUp = false;
 
@@ -67,7 +68,13 @@ export class LoginDialogComponent {
 
   onSignup(){
     // TODO: check invitation code
-    console.log('invite code:', this.invitecode);
+    if(this.invitationCodeUI !== this.invitationCode){
+      alert('Incorrect invitation code.')
+    }else{
+      this.showSignUp = false;
+      this.showLogIn = true;
+    }
+    console.log('invite code:', this.invitationCodeUI);
     console.log('Username:', this.username);
     console.log('Password:', this.password);
     }

@@ -31,6 +31,8 @@ export class AppComponent {
   public trimFlag=false;
   public savedMsg:msgType[]=[];
   public username: string;
+  public invitationCode = 'hi2025';
+
   constructor(private apiService: ApiService) {}
 
   ngOnInit():void{

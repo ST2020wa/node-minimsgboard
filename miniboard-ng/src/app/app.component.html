@@ -8,7 +8,7 @@
       <button (click)="onSubmitMessage()" style="width: fit-content">Send</button>
     </div>
     <div class="login" *ngIf="!username"><span class="underline" (click)="openLoginDialog()">Log in</span> to send your first message. </div>
-    <app-login-dialog></app-login-dialog>
+    <app-login-dialog [invitationCode]="invitationCode"></app-login-dialog>
   </div>
   
   <ul>
