@@ -5,9 +5,7 @@ const { Pool } = require('pg'); // Import the pg module
 
 const app = express();
 const port = 3000;
-const messages = [];
 
-const path = require("node:path");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
@@ -188,6 +186,29 @@ app.post("/submit-msg", async (req, res, next)=>{
     await pool.query("INSERT INTO msg (user_id, content) VALUES ($1, $2)",[req.body.username, req.body.msg]);
   }catch(err){
     return next(err);
+  }
+})
+
+app.post("/sign-up", async(req, res, next)=>{
+  const {username, password}=req.body;
+  if(!username || !password){
+    return res.status(400).json({message: "Username and password are required"});
+  }
+  try{
+    const userCheck = await pool.query("SELECT * FROM users WHERE username = $1",[username]);
+    if(userCheck.rows.length){
+      return res.status(400).json({message: "Username already exists"});
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const result = await pool.query(
+      "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *",
+      [username, hashedPassword]
+    );
+    const newUser = result.rows[0].username;
+    res.status(201).json({username: newUser.username, message: "Sign-up successful"});
+  }catch(err){
+    console.error("Sign-up error:", err);
+    res.status(500).json({ message: "Server error during sign-up" });
   }
 })
 
