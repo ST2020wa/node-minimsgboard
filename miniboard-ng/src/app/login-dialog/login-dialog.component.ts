@@ -32,34 +32,28 @@ export class LoginDialogComponent {
 
   constructor(private apiService: ApiService){}
 
-  ngOnDestory(){
+  public ngOnDestory(){
     //
   }
 
-  openDialog(): void {
+  public openDialog(): void {
     this.loginDialog.nativeElement.showModal();
   }
 
-  closeDialog(): void {
+  public closeDialog(): void {
     this.loginDialog.nativeElement.close();
   }
 
-  toggleToSignUp(){
+  public toggleToSignUp(){
     this.showLogIn = false;
     this.showSignUp = true;
     this.username='';
     this.password='';
   }
 
-  onLogIn(): void {
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
+  public onLogIn(): void {
     this.apiService.onLogin(this.username, this.password).subscribe(
       (response) => {
-        // localStorage.setItem('token', response.token);
-        // localStorage.setItem('username', response.username);
-        console.log('Login successful:', response);
-        // Handle successful login (e.g., update UI, redirect, etc.)
         this.closeDialog();
       },
       (error) => {
@@ -69,16 +63,12 @@ export class LoginDialogComponent {
     );
   }
 
-  onSignup(){
-    // TODO: check invitation code
+  public onSignup(){
     if(this.invitationCodeUI !== this.invitationCode){
       alert('Incorrect invitation code.')
     }else{
+      //TODO sign up request
       this.showSignUp = false;
-      this.showLogIn = true;
     }
-    console.log('invite code:', this.invitationCodeUI);
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
     }
 }

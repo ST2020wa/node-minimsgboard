@@ -7,6 +7,7 @@ import { InputComponent } from './input/input.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
+import { StorageService } from './storage.service';
 
 interface msgType {
   id: number;
@@ -36,40 +37,25 @@ export class AppComponent {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private storageService: StorageService) {}
 
   ngOnInit():void{
     this.apiService.getSavedData().subscribe(response => {
       this.messages = response;
     });
-    // this.apiService.checkAuth().subscribe();
     this.getUsername();
   }
 
-  ngAfterViewInit(){
-    //this.getLoggedInUser();
-  }
-
   public getUsername(){
-    const token = localStorage.getItem('token');
-    if (token) {
-      // User is logged in
+    if(this.storageService.getItem('token')){
       const storedUsername = localStorage.getItem('username');
       if (storedUsername) {
         this.username = storedUsername;
         this.isLoggedInSubject.next(true);
-        console.log("User is logged in:", this.username);
       }
-    } else {
-      // User is not logged in
+    }else{
       this.isLoggedInSubject.next(false); 
-      console.log("User is not logged in");
-    }
-  }
-
-  // TODO: check if reload is the only way to do so
-  private refreshPage(): void {
-    window.location.reload();
+    };
   }
 
   public nameInputHandler(e){
@@ -79,25 +65,6 @@ export class AppComponent {
   public msgInputHandler(e){
     this.newMsg=e;
   }
-
-    // Method to handle form submission
-    public onSubmitMsg() {
-      if (this.newMsg.trim() && this.newName.trim()) {
-        this.apiService.sendMessage(this.newName, this.newMsg).subscribe(
-          (response) => {
-            this.messages.push(response);  // Add the new message to the list
-            this.newName='';
-            this.newMsg='';
-          },
-          (error) => {
-            console.error('Error sending message:', error);
-            alert("Oops, something went wrong. Failed to send the message.")
-          }
-        );
-      }else{
-        alert("Both name and message fields are required.");
-      }
-    }
 
     public onSubmitMessage(){
       if (this.newMsg.trim()) {
@@ -122,20 +89,8 @@ export class AppComponent {
     }
 
     public onLogout(){
-      localStorage.removeItem('username');
-      localStorage.removeItem('token');
+      this.storageService.removeItems(['username', 'token']);
       this.username = '';
       this.isLoggedInSubject.next(false);
     }
-
-    // public isLoggedIn(): boolean {
-    //   return localStorage.getItem("username") !== null;
-    // }
-    // public getLoggedInUser(){
-    //   this.username = localStorage.getItem("username") || '';
-    //   if(this.username.length){
-    //     localStorage.setItem('username', this.username);
-    //   }
-    // }
-    
   }
