@@ -3,7 +3,12 @@
 <img width="1146" alt="Screen Shot 2025-01-07 at 2 34 55 PM" src="https://github.com/user-attachments/assets/626aabd9-d248-4ed0-9a44-c24b630cd3c5" />
 
 
-Welcome to the Message Board project! This project is a simple web application that allows users to post and view messages. There's a quick look ⬆️. It features a front-end built with Angular and a back-end built with Node.js. The project is organized into two main folders: miniboard-ng (for the front-end) and miniboard-node (for the back-end).
+Welcome to the Message Board project! There's a quick look ⬆️. This project is a simple web application that allows users to view and post messages. It features a front-end built with Angular and a back-end built with Node.js.
+
+### Version 2 (v2) Release Highlights
+
+In the second release, we've introduced **sign-up and log-in functionality** to enhance user interaction. Now, only logged-in users can post messages on the board. Visitors can view messages anonymously (without sender names displayed), sign up using an **invitation code**, and log in to reveal message senders and contribute their own posts. All user information and messages are securely stored in a **PostgreSQL database**, ensuring data persistence and reliability.
+
 ## Project Structure
 
 ```
@@ -18,6 +23,7 @@ Message-Board/
     ├── package.json
     └── routes/
 ```
+The project is organized into two main folders: miniboard-ng (for the front-end) and miniboard-node (for the back-end). 
 
 miniboard-ng/: This folder contains the Angular front-end application. It includes the user interface for submitting and viewing messages.
 minboard-node/: This folder contains the Node.js back-end API that handles requests for creating and retrieving messages.
