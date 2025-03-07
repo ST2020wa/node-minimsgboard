@@ -36,10 +36,6 @@
     }
     .login {
       cursor: default;
-        .underline {
-          text-decoration: underline;
-          cursor: pointer;
-        }
     }
     .message-box {
         border: 1px solid #00FF00;
@@ -75,5 +71,20 @@
       }
       ul {
         padding: 0;
+      }
+      .login-greeting {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        .header {
+          cursor: default;
+          font-size: 20px;
+          font-weight: bold;
+        }
+      }
+      .underline {
+        text-decoration: underline;
+        cursor: pointer;
       }
   }

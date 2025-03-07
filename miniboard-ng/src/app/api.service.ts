@@ -39,10 +39,11 @@ export class ApiService {
 
   onLogin(username: string, password: string){
     const userInfo = {username: username, password: password}
-    return this.http.post<{ username: string; message: string }>(`${this.dbApiUrl}/log-in`, userInfo).pipe(
+    return this.http.post<{ username: string; message: string; token: string }>(`${this.dbApiUrl}/log-in`, userInfo).pipe(
       tap((response)=>{
-        console.log("log in successful: ", response);
-        localStorage.setItem("username", response.username);
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('username', response.username);
+        console.log("Login successful: ", response);
       }),
       catchError((error) => {
         console.error('log in error:', error);
@@ -51,15 +52,15 @@ export class ApiService {
     );  
   }
 
-  checkAuth() {
-    return this.http.get<{ username: string }>("http://localhost:3000/current-user").pipe(
-      tap((response) => {
-        localStorage.setItem("username", response.username);
-      }),
-      catchError(() => {
-        localStorage.removeItem("username");
-        return of(null);
-      })
-    );
-  }
+  // checkAuth() {
+  //   return this.http.get<{ username: string }>("http://localhost:3000/current-user").pipe(
+  //     tap((response) => {
+  //       localStorage.setItem("username", response.username);
+  //     }),
+  //     catchError(() => {
+  //       localStorage.removeItem("username");
+  //       return of(null);
+  //     })
+  //   );
+  // }
 }

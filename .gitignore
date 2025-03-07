@@ -1,0 +1,34 @@
+# Ignore node_modules directories
+node_modules/
+miniboard-ng/node_modules/
+miniboard-node/node_modules/
+
+# Ignore build artifacts
+dist/
+miniboard-ng/dist/
+miniboard-node/dist/
+
+# Ignore environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and debug files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore Angular cache
+.cache/
+.angular/

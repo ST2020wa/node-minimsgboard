@@ -12,6 +12,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
 
 // Set up PostgreSQL client
 const pool = new Pool({
@@ -107,14 +108,16 @@ app.post("/log-in", (req, res, next) => {
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    req.logIn(user, (err) => {
-      if (err) {
-        return res.status(500).json({ message: "Login failed" });
-      }
-      console.log("Logged in as:", user.username);
-      return res.json({ username: user.username, message: "Login successful" });
-    });
+    const token = jwt.sign(
+      { id: user.id, username: user.username }, // Payload (data to include in the token)
+      "your-secret-key", // Secret key (keep this secure and use environment variables in production)
+      { expiresIn: "1h" } // Token expiration time
+    );
+
+    // Return the token and user info in the response
+    return res.json({ username: user.username, token, message: "Login successful" });
   })(req, res, next);
+  
 });
 
 passport.use(

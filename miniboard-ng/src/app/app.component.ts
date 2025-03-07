@@ -6,6 +6,7 @@ import { CommonModule, DatePipe, NgFor } from '@angular/common';
 import { InputComponent } from './input/input.component';
 import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 interface msgType {
   id: number;
@@ -32,6 +33,8 @@ export class AppComponent {
   public savedMsg:msgType[]=[];
   public username: string;
   public invitationCode = 'hi2025';
+  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
   constructor(private apiService: ApiService) {}
 
@@ -39,15 +42,33 @@ export class AppComponent {
     this.apiService.getSavedData().subscribe(response => {
       this.messages = response;
     });
-    this.apiService.checkAuth().subscribe();
+    // this.apiService.checkAuth().subscribe();
+    this.getUsername();
   }
 
   ngAfterViewInit(){
-    this.getLoggedInUser();
+    //this.getLoggedInUser();
+  }
+
+  public getUsername(){
+    const token = localStorage.getItem('token');
+    if (token) {
+      // User is logged in
+      const storedUsername = localStorage.getItem('username');
+      if (storedUsername) {
+        this.username = storedUsername;
+        this.isLoggedInSubject.next(true);
+        console.log("User is logged in:", this.username);
+      }
+    } else {
+      // User is not logged in
+      this.isLoggedInSubject.next(false); 
+      console.log("User is not logged in");
+    }
   }
 
   // TODO: check if reload is the only way to do so
-  public refreshPage(): void {
+  private refreshPage(): void {
     window.location.reload();
   }
 
@@ -100,14 +121,21 @@ export class AppComponent {
       this.loginDialog.openDialog();
     }
 
-    public isLoggedIn(): boolean {
-      return localStorage.getItem("username") !== null;
+    public onLogout(){
+      localStorage.removeItem('username');
+      localStorage.removeItem('token');
+      this.username = '';
+      this.isLoggedInSubject.next(false);
     }
-    public getLoggedInUser(){
-      this.username = localStorage.getItem("username") || '';
-      if(this.username.length){
-        localStorage.setItem('username', this.username);
-      }
-    }
+
+    // public isLoggedIn(): boolean {
+    //   return localStorage.getItem("username") !== null;
+    // }
+    // public getLoggedInUser(){
+    //   this.username = localStorage.getItem("username") || '';
+    //   if(this.username.length){
+    //     localStorage.setItem('username', this.username);
+    //   }
+    // }
     
   }

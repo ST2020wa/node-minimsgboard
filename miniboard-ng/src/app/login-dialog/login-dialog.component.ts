@@ -7,10 +7,11 @@ import { ApiService } from '../api.service';
 export type user = {
   id?: number,
   username: string,
-  password: string,
+  password?: string,
   fist_name?: string,
   last_name?: string,
-  member_status?: string
+  member_status?: string,
+  token?: string
 }
 
 @Component({
@@ -55,6 +56,8 @@ export class LoginDialogComponent {
     console.log('Password:', this.password);
     this.apiService.onLogin(this.username, this.password).subscribe(
       (response) => {
+        // localStorage.setItem('token', response.token);
+        // localStorage.setItem('username', response.username);
         console.log('Login successful:', response);
         // Handle successful login (e.g., update UI, redirect, etc.)
         this.closeDialog();
