@@ -12,16 +12,16 @@ export class ApiService {
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
 
-  getSavedData(): Observable<any> {
+  public getSavedData(): Observable<any> {
     return this.http.get(`${this.dbApiUrl}/messages`);
   }
 
-  submitMessage(username: string, msg: string): Observable<any>{
+  public submitMessage(username: string, msg: string): Observable<any>{
     const message = {username: username, msg: msg}
     return this.http.post(`${this.dbApiUrl}/submit-msg`, message); 
   }
 
-  onLogin(username: string, password: string){
+  public onLogin(username: string, password: string){
     const userInfo = {username: username, password: password}
     return this.http.post<{ username: string; message: string; token: string }>(`${this.dbApiUrl}/log-in`, userInfo).pipe(
       tap((response)=>{
@@ -34,5 +34,15 @@ export class ApiService {
         return throwError(() => new Error('log in error'));
       })
     );  
+  }
+
+  public onSignup(username: string, password: string) {
+    const userInfo = { username: username, password: password };
+    return this.http.post(`${this.dbApiUrl}/sign-up`, userInfo).pipe(
+      catchError((error) => {
+        console.error('Sign-up error:', error);
+        return throwError(() => new Error('Sign-up error'));
+      })
+    );
   }
 }

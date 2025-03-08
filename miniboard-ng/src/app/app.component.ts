@@ -33,7 +33,7 @@ export class AppComponent {
   public trimFlag=false;
   public savedMsg:msgType[]=[];
   public username: string;
-  public invitationCode = 'hi2025';
+  public invitationCode = '+2025';
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 

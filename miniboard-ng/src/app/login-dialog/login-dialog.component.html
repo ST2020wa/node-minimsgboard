@@ -20,6 +20,8 @@
       <input id="username" [(ngModel)]="username" name="username" required>
       <label for="password">Password:</label>
       <input id="password" type="password" [(ngModel)]="password" name="password" required>
+      <label for="passwordRe">Re-enter Password:</label>
+      <input id="passwordRe" type="password" [(ngModel)]="passwordRe" name="passwordRe" required>
       
       <button type="button" (click)="onSignup()">Sign up</button>
       <button type="button" (click)="closeDialog()">Cancel</button>
