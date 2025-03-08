@@ -31,11 +31,6 @@ app.use(bodyParser.json());
 app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
-
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user });
-});
-
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
@@ -82,19 +77,6 @@ app.post('/api/messages', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
-  }
-});
-
-app.post("/sign-up", async (req, res, next) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [
-      req.body.username,
-      hashedPassword
-    ]);
-    res.redirect("/");
-  } catch(err) {
-    return next(err);
   }
 });
 
@@ -205,14 +187,13 @@ app.post("/sign-up", async(req, res, next)=>{
       [username, hashedPassword]
     );
     const newUser = result.rows[0].username;
-    res.status(201).json({username: newUser.username, message: "Sign-up successful"});
+    res.status(201).json({username: newUser, message: "Sign-up successful"});
   }catch(err){
     console.error("Sign-up error:", err);
     res.status(500).json({ message: "Server error during sign-up" });
   }
 })
 
-  // Start the server
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
   });
