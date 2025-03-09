@@ -38,6 +38,9 @@
       cursor: default;
     }
     .message-box {
+      display: flex;
+      gap:12px;
+      justify-content: space-between;
         border: 1px solid #00FF00;
         padding: 10px;
         margin: 10px 0;
@@ -47,6 +50,12 @@
             font-style: normal;
             margin-right: 20px;
         }
+        .delete {
+          font-style: italic;
+          font-size: smaller;
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
   
       button {
@@ -54,10 +63,13 @@
         color: #00FF00;
         background-color: #000;
         border: 1px solid #00FF00;
-        padding: 5px 15px;
         cursor: pointer;
         text-transform: uppercase;
-        height:3em;
+        height: 38px;
+        padding: 8px 16px;
+        box-sizing: border-box;
+        line-height: 1;
+        margin-top: 1px;
       }
   
       button:hover {

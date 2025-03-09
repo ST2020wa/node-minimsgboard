@@ -70,7 +70,6 @@ export class LoginDialogComponent {
     const username = this.username.trim();
     const password = this.password.trim();
     const passwordReEnter = this.passwordRe.trim();
-    console.log(username, password, passwordReEnter)
     if(this.invitationCodeUI !== this.invitationCode){
       alert('Incorrect invitation code.');
       return;
@@ -85,7 +84,6 @@ export class LoginDialogComponent {
     }
     this.apiService.onSignup(username, password).subscribe(
       {next: (response) => {
-        console.log('Sign-up successful:', response);
         this.showSignUp = false; // Only set to false on success
         this.showLogIn = true;
         alert('Sign-up successful. Please log in.');

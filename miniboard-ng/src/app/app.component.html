@@ -14,10 +14,14 @@
   </div>
   
   <ul>
-    <div class="message-box" *ngFor="let msg of messages" style="display: flex; gap:12px;">
-      <div class="msg">{{msg.content}}</div>
-      <div *ngIf="username?.length">from {{msg.user_id}}</div>
-      <div>{{msg.created_at | date:'short'}}</div>
+    <div class="message-box" *ngFor="let msg of messages">
+      <div style="display: flex; gap: 12px;">
+        <div class="msg">{{msg.content}}</div>
+        <div *ngIf="username?.length">from {{msg.user_id}}</div>
+        <div *ngIf="username?.length">at {{msg.created_at | date:'short'}}</div>
+        <div *ngIf="!username?.length">from anonymous user</div>
+      </div>
+      <div *ngIf="isEditMode" class="delete" (click)="onDeleteMsg(msg.content)">Delete</div>
     </div>
   </ul>
 </div>

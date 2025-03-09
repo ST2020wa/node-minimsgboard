@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
 
@@ -27,7 +27,7 @@ export class ApiService {
       tap((response)=>{
         this.storageService.setItem('username', response.username);
         this.storageService.setItem('token', response.token);
-        console.log("Login successful: ", response);
+        //console.log("Login successful: ", response);
       }),
       catchError((error) => {
         console.error('log in error:', error);
@@ -44,5 +44,21 @@ export class ApiService {
         return throwError(() => new Error('Sign-up error'));
       })
     );
+  }
+
+  public onDeleteMsg(msgContent: string) {
+    return fetch(`${this.dbApiUrl}/delete-msg`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: msgContent })
+    }).then(response => response.json())
+      .then(data => {
+        console.log("Delete successful:", data);
+        return data;
+      })
+      .catch(error => {
+        console.error("Delete error:", error);
+        throw error;
+      });
   }
 }

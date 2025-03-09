@@ -194,6 +194,35 @@ app.post("/sign-up", async(req, res, next)=>{
   }
 })
 
+app.delete("/delete-msg", async (req, res, next) => {
+  console.log("DELETE request received at /delete-msg");
+  console.log("Request body:", req.body); // Debugging log
+  const { content } = req.body;
+  if (!content) {
+    return res.status(400).json({ message: "Message content is required" });
+  }
+  try {
+    const messageCheck = await pool.query(
+      "SELECT * FROM msg WHERE content = $1",
+      [content]
+    );
+
+    if (messageCheck.rows.length === 0) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    await pool.query(
+      "DELETE FROM msg WHERE content = $1",
+      [content]
+    );
+
+    res.status(200).json({ message: "Message deleted successfully" });
+  } catch (err) {
+    console.error("Delete message error:", err);
+    res.status(500).json({ message: "Server error during message deletion" });
+  }
+});
+
   app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
   });

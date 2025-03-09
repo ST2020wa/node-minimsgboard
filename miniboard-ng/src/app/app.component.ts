@@ -36,6 +36,7 @@ export class AppComponent {
   public invitationCode = '+2025';
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  public isEditMode = false;
 
   constructor(private apiService: ApiService, private storageService: StorageService) {}
 
@@ -53,6 +54,7 @@ export class AppComponent {
         this.username = storedUsername;
         this.isLoggedInSubject.next(true);
       }
+      this.isEditMode = this.username === 'Admin';
     }else{
       this.isLoggedInSubject.next(false); 
     };
@@ -91,6 +93,11 @@ export class AppComponent {
     public onLogout(){
       this.storageService.removeItems(['username', 'token']);
       this.username = '';
+      this.isEditMode = false;
       this.isLoggedInSubject.next(false);
+    }
+
+    public onDeleteMsg(message: string){
+      this.apiService.onDeleteMsg(message).then(console.log).catch(console.error);
     }
   }
