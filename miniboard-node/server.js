@@ -165,10 +165,21 @@ app.get("/current-user", (req, res) => {
 
 app.post("/submit-msg", async (req, res, next)=>{
   try {
-    await pool.query("INSERT INTO msg (user_id, content) VALUES ($1, $2)",[req.body.username, req.body.msg]);
+    const result = await pool.query(
+      "INSERT INTO msg (user_id, content) VALUES ($1, $2) RETURNING *",
+      [req.body.username, req.body.msg]
+    ); // result is defined
+    if (result.rows.length > 0) {
+      console.log('Message saved:', result.rows[0]);
+      return res.status(201).json(result.rows[0]);
+    } else {
+      console.error('No rows returned after insert');
+      return res.status(500).json({ message: 'Message saved but no data returned' });
+    }
   }catch(err){
-    return next(err);
-  }
+    console.error('Submit message error:', err);
+    res.status(500).json({ message: 'Server error during message submission' });
+   }
 })
 
 app.post("/sign-up", async(req, res, next)=>{

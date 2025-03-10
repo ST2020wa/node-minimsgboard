@@ -17,8 +17,16 @@ export class ApiService {
   }
 
   public submitMessage(username: string, msg: string): Observable<any>{
-    const message = {username: username, msg: msg}
-    return this.http.post(`${this.dbApiUrl}/submit-msg`, message); 
+    console.log(username, msg);
+    return this.http.post(`${this.dbApiUrl}/submit-msg`, {
+      username: username,
+      msg: msg
+    }).pipe(
+      catchError((err)=>{
+        console.error('Submit message error:', err);
+        return throwError(() => new Error('Submit message error'));
+      })
+    ); 
   }
 
   public onLogin(username: string, password: string){

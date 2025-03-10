@@ -14,7 +14,7 @@
   </div>
   
   <ul>
-    <div class="message-box" *ngFor="let msg of messages">
+    <div class="message-box" *ngFor="let msg of messages$ | async">
       <div style="display: flex; gap: 12px;">
         <div class="msg">{{msg.content}}</div>
         <div *ngIf="username?.length">from {{msg.user_id}}</div>

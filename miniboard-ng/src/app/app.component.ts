@@ -8,6 +8,7 @@ import { LoginDialogComponent } from './login-dialog/login-dialog.component';
 import { FormsModule } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 import { StorageService } from './storage.service';
+import { log } from 'node:console';
 
 interface msgType {
   id: number;
@@ -27,7 +28,8 @@ interface msgType {
 export class AppComponent {
   @ViewChild(LoginDialogComponent) loginDialog!: LoginDialogComponent;
   public title = 'miniboard-ng';
-  public messages:msgType[]=[];
+  private messagesSubject = new BehaviorSubject<msgType[]>([]);
+  public messages$ = this.messagesSubject.asObservable();
   public newName='';
   public newMsg='';
   public trimFlag=false;
@@ -40,11 +42,17 @@ export class AppComponent {
 
   constructor(private apiService: ApiService, private storageService: StorageService) {}
 
-  ngOnInit():void{
-    this.apiService.getSavedData().subscribe(response => {
-      this.messages = response;
-    });
+  public ngOnInit():void{
+    this.loadMessages();
     this.getUsername();
+  }
+
+  private loadMessages(): void {
+    console.log(this.messages$)
+    this.apiService.getSavedData().subscribe({
+      next: (messages) => this.messagesSubject.next(messages),
+      error: (err) => console.error('Failed to load messages:', err)
+    });
   }
 
   public getUsername(){
@@ -70,17 +78,18 @@ export class AppComponent {
 
     public onSubmitMessage(){
       if (this.newMsg.trim()) {
-        this.apiService.submitMessage(this.username, this.newMsg).subscribe(
-          (response) => {
-            this.messages.push(response);  // Add the new message to the list
+        this.apiService.submitMessage(this.username, this.newMsg).subscribe({
+          next:(response)=>{
+            console.log('Message submitted successfully:', response);
+            this.loadMessages();
             this.newName='';
             this.newMsg='';
           },
-          (error) => {
+          error: (error) => {
             console.error('Error sending message:', error);
             alert("Oops, something went wrong. Failed to send the message.")
           }
-        );
+        });
       }else{
         alert("Message field is required.");
       }
@@ -98,6 +107,8 @@ export class AppComponent {
     }
 
     public onDeleteMsg(message: string){
-      this.apiService.onDeleteMsg(message).then(console.log).catch(console.error);
+      this.apiService.onDeleteMsg(message).then(()=>{
+        this.loadMessages();
+      }).catch(console.error);
     }
   }
