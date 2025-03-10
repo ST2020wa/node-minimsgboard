@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { log } from 'console';
 import { ApiService } from '../api.service';
 import { UserInfo } from 'os';
+import e from 'express';
 
 export type user = {
   id?: number,
@@ -74,7 +75,7 @@ export class LoginDialogComponent {
       alert('Incorrect invitation code.');
       return;
     }
-    if(username.length && password.length && passwordReEnter.length && (username.length < 6) && (password.length < 6)){
+    if(!username.length || !password.length || (username.length < 6) || (password.length < 6)){
       alert('Both the username and password need to be at least 6 characters long.');
       return;
     }
@@ -89,9 +90,11 @@ export class LoginDialogComponent {
         alert('Sign-up successful. Please log in.');
       },
       error: (error) => {
-        console.error('Sign-up failed:', error);
-        alert('Sign-up failed. Please try again.');
-      }}
+        if (error.message === 'Username already exists') {
+          alert('Username is already taken. Please choose another.');
+        } else {
+          alert('Sign-up failed. Please try again.');
+        }      }}
     );
     }
 }

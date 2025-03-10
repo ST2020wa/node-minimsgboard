@@ -48,8 +48,7 @@ export class ApiService {
     const userInfo = { username: username, password: password };
     return this.http.post(`${this.dbApiUrl}/sign-up`, userInfo).pipe(
       catchError((error) => {
-        console.error('Sign-up error:', error);
-        return throwError(() => new Error('Sign-up error'));
+        return throwError(() => new Error(error.error.message));
       })
     );
   }

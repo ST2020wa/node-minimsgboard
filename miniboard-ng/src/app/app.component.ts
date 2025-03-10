@@ -48,7 +48,6 @@ export class AppComponent {
   }
 
   private loadMessages(): void {
-    console.log(this.messages$)
     this.apiService.getSavedData().subscribe({
       next: (messages) => this.messagesSubject.next(messages),
       error: (err) => console.error('Failed to load messages:', err)
