@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ElementRef, Input, Output,EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { log } from 'console';
 import { ApiService } from '../api.service';
-import { UserInfo } from 'os';
-import e from 'express';
 
 export type user = {
   id?: number,
@@ -35,23 +32,19 @@ export class LoginDialogComponent {
 
   constructor(private apiService: ApiService){}
 
-  public ngOnDestory(){
-    //
-  }
-
   public openDialog(): void {
     this.loginDialog.nativeElement.showModal();
   }
 
   public closeDialog(): void {
     this.loginDialog.nativeElement.close();
+    this.resetInputs();
   }
 
   public toggleToSignUp(){
     this.showLogIn = false;
     this.showSignUp = true;
-    this.username='';
-    this.password='';
+    this.resetInputs();
   }
 
   public onLogIn(): void {
@@ -86,6 +79,7 @@ export class LoginDialogComponent {
     this.apiService.onSignup(username, password).subscribe(
       {next: (response) => {
         this.showSignUp = false; // Only set to false on success
+        this.resetInputs();
         this.showLogIn = true;
         alert('Sign-up successful. Please log in.');
       },
@@ -96,5 +90,12 @@ export class LoginDialogComponent {
           alert('Sign-up failed. Please try again.');
         }      }}
     );
+    }
+
+    private resetInputs(){
+      this.username='';
+      this.password='';
+      this.passwordRe = '';
+      this.invitationCodeUI='';
     }
 }

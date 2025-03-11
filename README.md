@@ -7,7 +7,20 @@ Welcome to the Message Board project! There's a quick look ⬆️. This project 
 
 ### Version 2 (v2) Release Highlights
 
-In the second release, we've introduced **sign-up and log-in functionality** to enhance user interaction. Now, only logged-in users can post messages on the board. Visitors can view messages anonymously (without sender names displayed), sign up using an **invitation code**, and log in to reveal message senders and contribute their own posts. All user information and messages are securely stored in a **PostgreSQL database**, ensuring data persistence and reliability.
+The second release introduces **enhanced user authentication and message management** features:
+
+1. **User Authentication**:
+   - **Sign-up & Log-in**: Users can now create accounts and log in to access additional features
+   - **Invitation Code System**: New users must provide a valid invitation code to register
+   - **Anonymous Viewing**: Visitors can view message content without logging in
+   - **Enhanced Privacy**: Only logged-in users can see message senders' usernames and timestamps
+
+2. **Message Management**:
+   - **Admin Privileges**: Special admin accounts can delete messages
+   - **Secure Storage**: All user information and messages are securely stored in a **PostgreSQL database**, ensuring data persistence and reliability
+   - **Content Control**: While visitors can read messages, only authenticated users can post new messages and view full message details
+
+These new features create a more secure and engaging platform while maintaining accessibility for all visitors.
 
 ## Project Structure
 
