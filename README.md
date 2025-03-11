@@ -1,6 +1,7 @@
 # Mini Message Board Project
 
-<img width="1146" alt="Screen Shot 2025-01-07 at 2 34 55 PM" src="https://github.com/user-attachments/assets/626aabd9-d248-4ed0-9a44-c24b630cd3c5" />
+![Screen Shot 2025-03-11 at 2 50 18 PM](https://github.com/user-attachments/assets/dc955997-2021-4017-922b-f417de8b5858)
+![Screen Shot 2025-03-11 at 2 51 32 PM](https://github.com/user-attachments/assets/901fa450-fb9a-4d17-b1b7-5ab36629f5a7)
 
 
 Welcome to the Message Board project! There's a quick look ⬆️. This project is a simple web application that allows users to view and post messages. It features a front-end built with Angular and a back-end built with Node.js.
