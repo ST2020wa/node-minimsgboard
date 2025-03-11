@@ -5,7 +5,6 @@ miniboard-node/node_modules/
 
 # Ignore build artifacts
 dist/
-miniboard-ng/dist/
 miniboard-node/dist/
 
 # Ignore environment files

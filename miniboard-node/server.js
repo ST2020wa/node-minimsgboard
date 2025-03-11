@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const { Pool } = require('pg'); // Import the pg module
 
 const app = express();
-const port = 3000;
 
 const session = require("express-session");
 const passport = require("passport");
@@ -13,22 +12,27 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 
 // Set up PostgreSQL client
+const port = process.env.PORT || 3000;
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'miniboard',
-  password: 'postgres',
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
-
 // Enable CORS to allow your Angular app to make requests to this backend
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://miniboard-backend.onrender.com',
+    'http://localhost:4200'
+  ],
+  credentials: true
+}));
 
 // Middleware to parse JSON bodies in POST requests
 app.use(express.json());
 app.use(bodyParser.json());
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: false }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
@@ -89,9 +93,9 @@ app.post("/log-in", (req, res, next) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign(
-      { id: user.id, username: user.username }, // Payload (data to include in the token)
-      "your-secret-key", // Secret key (keep this secure and use environment variables in production)
-      { expiresIn: "1h" } // Token expiration time
+      { id: user.id, username: user.username }, // Payload
+      process.env.JWT_SECRET, // Use environment variable for JWT secret
+      { expiresIn: process.env.JWT_EXPIRES_IN } // Use environment variable for expiration
     );
 
     // Return the token and user info in the response
