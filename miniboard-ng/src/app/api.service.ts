@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
+import { environment } from '../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
   
-  private dbApiUrl = 'http://localhost:3000'
+  private dbApiUrl = environment.apiUrl
 
   constructor(private http: HttpClient, private storageService: StorageService) {}
 
