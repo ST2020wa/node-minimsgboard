@@ -63,15 +63,15 @@ app.get('/api/data', (req, res) => {
 });
   
 
-app.get('/api/messages', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM messages ORDER BY created_at DESC');
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-});
+// app.get('/api/messages', async (req, res) => {
+//   try {
+//     const result = await pool.query('SELECT * FROM messages ORDER BY created_at DESC');
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Server error');
+//   }
+// });
 
 app.post('/api/messages', async (req, res) => {
   const { name, msg } = req.body;
