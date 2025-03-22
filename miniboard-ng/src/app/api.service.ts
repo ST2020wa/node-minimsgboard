@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
-import { environment } from '../environments/environment.prod';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,9 @@ export class ApiService {
   
   private dbApiUrl = environment.apiUrl
 
-  constructor(private http: HttpClient, private storageService: StorageService) {}
+  constructor(private http: HttpClient, private storageService: StorageService) {
+    console.log('API URL:', this.dbApiUrl);
+  }
 
   public getSavedData(): Observable<any> {
     return this.http.get(`${this.dbApiUrl}/messages`);

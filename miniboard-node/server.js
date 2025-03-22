@@ -1,6 +1,7 @@
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const { Pool } = require('pg'); // Import the pg module
 
 const app = express();
@@ -15,10 +16,9 @@ const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 3000;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false, // Disable SSL locally
 });
+
 // Enable CORS to allow your Angular app to make requests to this backend
 app.use(cors({
   origin: [
@@ -30,9 +30,13 @@ app.use(cors({
 
 // Middleware to parse JSON bodies in POST requests
 app.use(express.json());
-app.use(bodyParser.json());
 
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
+app.use(session({
+  secret: process.env.SESSION_SECRET || "fallback_secret", // Use fallback in case it's undefined
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 app.use((req, res, next) => {
@@ -114,7 +118,6 @@ passport.use(
       }
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
-        // passwords do not match!
         return done(null, false, { message: "Incorrect password" })
       }
       return done(null, user);
@@ -147,13 +150,6 @@ app.get("/log-out", (req, res, next) => {
     res.redirect("/");
   });
 });
-
-app.use(session({
-  secret: "your_secret_key",
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false }
-}))
 
 app.use(passport.initialize());
 app.use(passport.session());
