@@ -44,6 +44,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res) => {
+  res.send('Server is running!');
+});
+
 app.get('/messages', async (req, res)=>{
   try{
     const result = await pool.query('SELECT * FROM msg ORDER BY created_at DESC');
