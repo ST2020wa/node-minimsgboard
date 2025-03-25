@@ -1,9 +1,28 @@
 # Mini Message Board Project
 
-<img width="1146" alt="Screen Shot 2025-01-07 at 2 34 55 PM" src="https://github.com/user-attachments/assets/626aabd9-d248-4ed0-9a44-c24b630cd3c5" />
+![Screen Shot 2025-03-11 at 2 50 18 PM](https://github.com/user-attachments/assets/dc955997-2021-4017-922b-f417de8b5858)
+![Screen Shot 2025-03-11 at 2 51 32 PM](https://github.com/user-attachments/assets/901fa450-fb9a-4d17-b1b7-5ab36629f5a7)
 
 
-Welcome to the Message Board project! This project is a simple web application that allows users to post and view messages. There's a quick look ⬆️. It features a front-end built with Angular and a back-end built with Node.js. The project is organized into two main folders: miniboard-ng (for the front-end) and miniboard-node (for the back-end).
+Welcome to the Message Board project! There's a quick look ⬆️. This project is a simple web application that allows users to view and post messages. It features a front-end built with Angular and a back-end built with Node.js.
+
+### Version 2 (v2) Release Highlights
+
+The second release introduces **enhanced user authentication and message management** features:
+
+1. **User Authentication**:
+   - **Sign-up & Log-in**: Users can now create accounts and log in to access additional features
+   - **Invitation Code System**: New users must provide a valid invitation code to register
+   - **Anonymous Viewing**: Visitors can view message content without logging in
+   - **Enhanced Privacy**: Only logged-in users can see message senders' usernames and timestamps
+
+2. **Message Management**:
+   - **Admin Privileges**: Special admin accounts can delete messages
+   - **Secure Storage**: All user information and messages are securely stored in a **PostgreSQL database**, ensuring data persistence and reliability
+   - **Content Control**: While visitors can read messages, only authenticated users can post new messages and view full message details
+
+These new features create a more secure and engaging platform while maintaining accessibility for all visitors.
+
 ## Project Structure
 
 ```
@@ -18,6 +37,7 @@ Message-Board/
     ├── package.json
     └── routes/
 ```
+The project is organized into two main folders: miniboard-ng (for the front-end) and miniboard-node (for the back-end). 
 
 miniboard-ng/: This folder contains the Angular front-end application. It includes the user interface for submitting and viewing messages.
 minboard-node/: This folder contains the Node.js back-end API that handles requests for creating and retrieving messages.

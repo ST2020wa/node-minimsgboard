@@ -1,5 +1,5 @@
 .body {
-    height:100vh;
+    height:100%;
     padding: 6px 12px;
     font-family: 'VT323', monospace;
     background-color: #000;
@@ -34,7 +34,13 @@
         gap:48px;
         align-items: center;
     }
+    .login {
+      cursor: default;
+    }
     .message-box {
+      display: flex;
+      gap:12px;
+      justify-content: space-between;
         border: 1px solid #00FF00;
         padding: 10px;
         margin: 10px 0;
@@ -44,6 +50,12 @@
             font-style: normal;
             margin-right: 20px;
         }
+        .delete {
+          font-style: italic;
+          font-size: smaller;
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
   
       button {
@@ -51,10 +63,13 @@
         color: #00FF00;
         background-color: #000;
         border: 1px solid #00FF00;
-        padding: 5px 15px;
         cursor: pointer;
         text-transform: uppercase;
-        height:3em;
+        height: 38px;
+        padding: 8px 16px;
+        box-sizing: border-box;
+        line-height: 1;
+        margin-top: 1px;
       }
   
       button:hover {
@@ -68,5 +83,20 @@
       }
       ul {
         padding: 0;
+      }
+      .login-greeting {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        .header {
+          cursor: default;
+          font-size: 20px;
+          font-weight: bold;
+        }
+      }
+      .underline {
+        text-decoration: underline;
+        cursor: pointer;
       }
   }

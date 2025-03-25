@@ -1,0 +1,30 @@
+<dialog #loginDialog>
+    <form *ngIf="showLogIn">
+      <h2>Log in</h2>
+      <label for="username">Username:</label>
+      <input id="username" [(ngModel)]="username" name="username" required>
+  
+      <label for="password">Password:</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required>
+  
+      <button type="submit" (click)="onLogIn()">Log in</button>
+      <button type="button" (click)="toggleToSignUp()">Sign up</button>
+      <button type="button" (click)="closeDialog()">Cancel</button>
+    </form>
+
+    <form *ngIf="showSignUp">
+      <h2>Register with an invitation code</h2>
+      <label for="invitecode">Invitation code:</label>
+      <input id="invitecode" required [(ngModel)]="invitationCodeUI" name="invitecode" >
+      <label for="username">Username:</label>
+      <input id="username" [(ngModel)]="username" name="username" required>
+      <label for="password">Password:</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required>
+      <label for="passwordRe">Re-enter Password:</label>
+      <input id="passwordRe" type="password" [(ngModel)]="passwordRe" name="passwordRe" required>
+      
+      <button type="button" (click)="onSignup()">Sign up</button>
+      <button type="button" (click)="closeDialog()">Cancel</button>
+      
+    </form>
+  </dialog>
