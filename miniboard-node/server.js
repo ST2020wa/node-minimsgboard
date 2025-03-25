@@ -1,28 +1,23 @@
 require('dotenv').config();
-
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg'); // Import the pg module
-
-const app = express();
-
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
-
-// Set up PostgreSQL client
 const port = process.env.PORT || 3000;
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false, // Disable SSL locally
 });
+const app = express();
 
 // Enable CORS to allow your Angular app to make requests to this backend
 app.use(cors({
   origin: [
-    'https://miniboard-backend.onrender.com',
+    'https://node-minimsgboard-1.onrender.com/',
     'http://localhost:4200'
   ],
   credentials: true
@@ -61,17 +56,6 @@ app.get('/messages', async (req, res)=>{
 app.get('/api/data', (req, res) => {
   res.json({ message: 'Hello from ST! Welcome to my first FULL-STACK project!' });
 });
-  
-
-// app.get('/api/messages', async (req, res) => {
-//   try {
-//     const result = await pool.query('SELECT * FROM messages ORDER BY created_at DESC');
-//     res.json(result.rows);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Server error');
-//   }
-// });
 
 app.post('/api/messages', async (req, res) => {
   const { name, msg } = req.body;
